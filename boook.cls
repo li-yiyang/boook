@@ -10,9 +10,10 @@
   kvoptions,     % Key value format for package options
   etoolbox,      % e-TeX tools for LaTeX
   geometry,      % Flexible and complete interface to document dimensions
+  xcolor,        % Driver-independent color extensions for LaTeX and pdfLaTeX
   graphicx,      % Enhanced support for graphics
   hyperref,      % Extensive support for hypertext
-  xcolor,        % Driver-independent color extensions for LaTeX and pdfLaTeX
+  etoc,          % Completely customisable TOCs
 }
 
 % ----- options -----
@@ -20,9 +21,20 @@
   family=BOOOK, prefix=BOOOK@, setkeys=\kvsetkeys}
 \newcommand{\ekv}[1]{\kvsetkeys{BOOOK}{#1}} % quick binding
 
-\DeclareStringOption[en]{lang}              % {default}{name}
+% language
+\DeclareStringOption[mix]{lang}             % {default}{name}
 \DeclareVoidOption{en}{\ekv{lang=en}}       % valid k-v pairs
 \DeclareVoidOption{cn}{\ekv{lang=cn}}
+\DeclareVoidOption{mix}{\ekv{lang=mix}}     % en keyword with chinese support
+
+% color set
+\DeclareStringOption[plain]{colorsets}
+\DeclareVoidOption{plain}{\ekv{colorsets=plain}}
+
+% geometry mode
+\DeclareStringOption[default]{geomode}
+\DeclareVoidOption{default}{\ekv{geomode=default}} % inner is greater for printting
+\DeclareVoidOption{digital}{\ekv{geomode=digital}} % texts are centered digital useage
 
 \DeclareDefaultOption{
   \PassOptionsToClass{\CurrentOption}{book}}
@@ -30,8 +42,20 @@
 
 
 % ----- code -----
+%% quick ifdefstringor code \ifdefstringor{varname}{{val1}{val2}}{true}{false}
+%% from https://tex.stackexchange.com/questions/351063/ifdefstring-with-logical-operator-is-it-possible
+\newcommand{\ifdefstringor}[2]{%
+  \begingroup\edef\x{\endgroup
+    \noexpand\ifboolexpr{
+      test {\noexpand\ifdefstring{\noexpand#1}{\@firstoftwo#2}}
+      or
+      test {\noexpand\ifdefstring{\noexpand#1}{\@secondoftwo#2}}
+    }%
+  }\x
+}
+
 %% language
-\ifdefstring{\BOOOK@lang}{cn}{
+\ifdefstringor{\BOOOK@lang}{{cn}{mix}}{
   \RequirePackage[UTF8, scheme=plain]{ctex}
   \xeCJKsetup{AutoFakeBold=true}
 }{\relax}
@@ -50,9 +74,20 @@
 %    %%%%%%%%%%%%%[footskip] %
 %         bottom  [footheight]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\geometry{
+\ifdefstring{\BOOOK@geomode}{default}{
+\geometry{ % default for printing
   paper=b6paper,
-  inner=25mm,
+  inner=20mm,
+  outer=10mm,
+  top=15mm,
+  bottom=10mm,
+  headheight=8mm,
+  headsep=5mm,
+  footskip=7mm
+}}{
+\geometry{ % better for digital reading
+  paper=b6paper,
+  inner=15mm,
   outer=15mm,
   top=15mm,
   bottom=10mm,
@@ -60,31 +95,29 @@
   headsep=5mm,
   footskip=7mm
 }
-
-%% graphicx
-% add default graphics path
-\graphicspath{{./figure/}{./figures/}{./img/}{./image/}{./images/}{./graphic/}{./graphics/}{./pic/}{./picture/}{./pictures/}}
+}
 
 %% xcolor
-%% use part of the color defined in my emacs
-%% in emacs M-x list-colors-display
-%% convert by ruby code:
-%%
-%% a = File.open("color.txt").each_line.map do |line|
-%%   temp = line.strip.split(/\t+/)
-%%   [
-%%     temp.first,
-%%     temp.last.split(/\s{2,}/).select {|a| !a.empty? }
-%%   ].flatten
-%% end
-%% s = a.map do |item|
-%%   "\\definecolor{#{item.first.gsub(" ", "")}}{RGB}" + \
-%%   "{#{item.last[1..2].to_i(16)}," + \
-%%   "#{item.last[3..4].to_i(16)}," + \
-%%   "#{item.last[5..6].to_i(16)}}"
-%% end.join("\n")
-%% 
-%% and with some small refining, it should be ok to use
+%%% The basic colorsets form Emacs
+%%%% use part of the color defined in my emacs
+%%%% in emacs M-x list-colors-display
+%%%% convert by ruby code:
+%%%%
+%%%% a = File.open("color.txt").each_line.map do |line|
+%%%%   temp = line.strip.split(/\t+/)
+%%%%   [
+%%%%     temp.first,
+%%%%     temp.last.split(/\s{2,}/).select {|a| !a.empty? }
+%%%%   ].flatten
+%%%% end
+%%%% s = a.map do |item|
+%%%%   "\\definecolor{#{item.first.gsub(" ", "")}}{RGB}" + \
+%%%%   "{#{item.last[1..2].to_i(16)}," + \
+%%%%   "#{item.last[3..4].to_i(16)}," + \
+%%%%   "#{item.last[5..6].to_i(16)}}"
+%%%% end.join("\n")
+%%%% 
+%%%% and with some small refining, it should be ok to use
 \definecolor{black}{RGB}{0,0,0}
 \definecolor{dimgray}{RGB}{105,105,105}
 \definecolor{darkgray}{RGB}{169,169,169}
@@ -221,7 +254,82 @@
 \definecolor{ghostwhite}{RGB}{248,248,255}
 \definecolor{lavenderblush}{RGB}{255,240,245}
 
+%%% Assigning different color sets for boook
+%%%% Note: About how to add a new set of color
+%%%% I think I've provided enough options to
+%%%% handle the color settings. All you need
+%%%% to do is simply copy the plain color set
+%%%% and replace its name and also the colorname.
+%%%% if you use emacs, it is helpful if you
+%%%% use M-x list-colors-display to see the color.
+\ifdefstring{\BOOOK@colorsets}{plain}{
+  % basic color
+  \newcommand{\titlecolor}{black}
+  \newcommand{\subtitlecolor}{dimgray}
+  \newcommand{\titledashcolor}{lightgray}
+  \newcommand{\authorcolor}{gray}
+  \newcommand{\linksintoccolor}{black}
+  \newcommand{\linkcolorofhyperref}{darkgray}
+  \newcommand{\urlcolorofhyperref}{darkgray}
+  \newcommand{\citecolorofhyperref}{darkgray}
+  % some color you may not likely to change one by one
+  \newcommand{\keywordbigcolor}{dimgray}
+  \newcommand{\keywordsmallcolor}{black}
+  \newcommand{\partnamecolor}{\keywordbigcolor}
+  \newcommand{\contentsnamecolor}{\keywordbigcolor}
+  \newcommand{\listtablenamecolor}{\keywordbigcolor}
+  \newcommand{\listfigurenamecolor}{\keywordbigcolor}
+  \newcommand{\appendixnamecolor}{\keywordbigcolor}
+  \newcommand{\bibnamenamecolor}{\keywordbigcolor}
+  \newcommand{\indexnamecolor}{\keywordbigcolor}
+  \newcommand{\figurenamecolor}{\keywordsmallcolor}
+  \newcommand{\tablenamecolor}{\keywordsmallcolor}
+}
+
+%% graphicx
+% add default graphics path
+\graphicspath{{./figure/}{./figures/}{./img/}{./image/}{./images/}{./graphic/}{./graphics/}{./pic/}{./picture/}{./pictures/}}
+
+%% hyperref
+%% belowing code mainly from ElgantBook
+\hypersetup{
+  breaklinks,
+  unicode,
+  linktoc=all,
+  bookmarksnumbered=true,
+  bookmarksopen=true,
+  pdfkeywords={BOOOK},
+  colorlinks,
+  linkcolor=\linkcolorofhyperref,
+  citecolor=\citecolorofhyperref,
+  urlcolor=\urlcolorofhyperref,
+  plainpages=false,
+  pdfstartview=FitH,
+  pdfborder={0 0 0},
+  linktocpage
+}
+
 % ----- newcommands and renewcommands -----
+%% commands for the particular label name specific
+%% to different languages
+%%% globally
+\renewcommand{\partname}{\color{\partnamecolor}}
+\renewcommand{\thepart}{Part \Roman{part}}
+
+%%% chinese
+\ifdefstring{\BOOOK@lang}{cn}{
+  \renewcommand{\contentsname}{目录}
+  \renewcommand{\listtablename}{表格目录}
+  \renewcommand{\listfigurename}{插图目录}
+  \renewcommand{\thepart}{第\zhnumber{\arabic{part}}部分}
+  \renewcommand{\figurename}{图}
+  \renewcommand{\tablename}{表}
+  \renewcommand{\bibname}{参考文献}
+  \renewcommand{\appendixname}{附录}
+  \renewcommand{\indexname}{索引}
+  \renewcommand{\proofname}{证明}
+}{\relax}
+
 %% commands that procedure arguments
 \global\let\@title\@empty
 \global\let\@author\@empty
@@ -231,7 +339,7 @@
 \newcommand{\cover}[1]{\gdef\@cover{#1}}
 
 %% commands that used in document
-\renewcommand*{\maketitle}{ %
+\renewcommand*{\maketitle}{%
 \begin{titlepage} % specify the title page
   \newgeometry{margin=0in}
   \pagenumbering{Alph} % not counting title page into normal page
@@ -255,11 +363,11 @@
   \vfill
   \hspace{5mm}
   \begin{minipage}[c]{0.65\linewidth} % title subtitle author
-    \begin{huge}\textbf{\ifcsname @title\endcsname \@title\else Title \fi}\end{huge}
+    \begin{huge}\color{\titlecolor}\bfseries{\ifcsname @title\endcsname \@title\else Title \fi}\end{huge}
     \vfill
-    \hspace{2mm} \ifcsname @subtitle\endcsname \color{dimgray}\textbf{\@subtitle} \fi
-    \hspace{0.5mm}\color{lightgray} \textbf{|} 
-    \begin{small}\color{darkgray}\@author\end{small}
+    \hspace{2mm} \color{\subtitlecolor}\ifcsname @subtitle\endcsname \color{dimgray}\bfseries{\@subtitle} \fi
+    \hspace{0.5mm}\color{\titledashcolor}\bfseries{|} 
+    \begin{small}\color{\authorcolor}\@author\end{small}
   \end{minipage}
   \hspace{7mm}
   \begin{minipage}[c]{0.2\textwidth} % logo page
@@ -267,7 +375,7 @@
     \ifcsname @logo\endcsname
       \includegraphics[
       width=\linewidth,
-      height=0.2\textheight,
+      height=0.1\textheight,
       keepaspectratio
       ]{\@logo} 
     \else
@@ -288,8 +396,14 @@
 \pagenumbering{arabic}
 }
 
-% \renewcommand{\tableofcontents}{%
-%   \hypersetup{linktoc=all, linkcolor=black}
-%   \chapter*{\contentsname\@mkboth{\MakeUppercase{\contentsname}}{\MakeUppercase{\contentsname}}}%
-%   \hypersetup{linkcolor=blue}
-% }
+%% table of contents
+\renewcommand{\tableofcontents}{%
+  \hypersetup{linktoc=all, linkcolor=\linksintoccolor}
+  \chapter*{\color{\contentsnamecolor}%
+      \contentsname\@mkboth{%
+      \MakeUppercase\contentsname}{%
+      \MakeUppercase\contentsname}
+  }%
+  \@starttoc{toc}
+  \hypersetup{linkcolor=skyblue}
+}
