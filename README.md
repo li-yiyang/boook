@@ -48,7 +48,11 @@ I will publish a blog for tutorial.
 
 Boook 的定位是一个用于学习如何编写 `.cls` 文件的简单的
 LaTeX 模版. 目前正在编写的过程中 [2022/10/28]. 
-并且再过一段时间, 我将会写一个相应的教程. 
+~~并且再过一段时间, 我将会写一个相应的教程. ~~
+
+(**[2022/11/03] Update | 更新**: 
+[Blog (chinese)](https://li-yiyang.github.io/misc/make-my-latex-class/) is done. 
+[博客](https://li-yiyang.github.io/misc/make-my-latex-class/)写好了. )
 
 It is inspired by the 
 [ElgantBook](https://github.com/ElegantLaTeX/ElegantBook),
