@@ -1,4 +1,4 @@
-\documentclass[geomode=oneside]{boook}
+\documentclass[geomode=digital, code=minted]{boook}
 \title{一个标题}
 \subtitle{一个副标题}
 \author{凉凉}
@@ -51,4 +51,28 @@
 問你何時曾看見 這世界為了人們改變
 
 有了夢寐以求的容顏 是否就算是擁有春天
+
+\appendix
+
+\chapter{Boook 使用方法}
+\image[Boook标志]{pic/logo.png}
+\section{文档基本结构}
+\begin{code}{latex}
+\documentclass[lang=mix, code=minted]{boook}
+\title{文档标题}
+\author{凉凉}
+% \cover{} % cover image path
+% \logo{} % logo image path
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\chapter{章}
+\section{节}
+\subsection{小节}
+\subsubsection{最小子节}
+\end{document}
+\end{code}
+
 \end{document}

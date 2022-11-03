@@ -2,6 +2,7 @@
 A very simple LaTeX template class for learning. 
 
 ## How to use
+### Old Method - (Stable, But Hard)
 If you just need to use it as a normal class 
 (for which I think is foolish, because 
 now [2022/10/28 ver.book], any other package 
@@ -26,6 +27,18 @@ make a good one.
 如果你愿意的话, 可以试试 `example.tex` 文件来试试. 
 这个是我用来 debug 用的文件. 不过在我确定一个好的封面图片前,
 你可能需要自己提供一个封面图片就是了. 
+
+### New Method - (A Little Unstable)
+If you're using Ruby with 3.1+ version, 
+install gems with command: 
+`gem install colorize fiber_scheduler`. 
+And run `rake one <your-tex-file>`, that's all. 
+(if you would not encounter compile errors. )
+
+如果你使用 Ruby 3.1+ 版本的话 (用了 fiber_scheduler gem), 
+使用 `gem install colorize fiber_scheduler`. 
+然后运行 `rake one <你的-tex-文件名>`, 
+就是这样. 
 
 ## About the boook
 Boook would be a very simple LaTeX template class for
@@ -61,3 +74,14 @@ in the possible future :p
 **booook** 这样的形式来标识. 
 又因为我可能不会在这个项目上花很多时间,
 所以版本里面的 `o` 的数量应该不会特别多 :p
+
+### Simple Log
+* **[2022/11/03] Update | 更新**:   
+  Almost done, though I can't tell it version boook. 
+  Issues are still in the template. Future works:  
+  基本完成了, 但是仍然不敢叫 `boook` 版本.
+  还有很多的缺陷. 之后需要做的: 
+  * More color sets | 增加更多颜色配色
+  * Better caption effect | 修改添加图表的 `caption` 的显示效果
+  * Better Automation | 更好的自动化 Rakefile
+  * Others | 其他一些目前还没想到的东西

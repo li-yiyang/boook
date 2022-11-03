@@ -13,7 +13,11 @@
   xcolor,        % Driver-independent color extensions for LaTeX and pdfLaTeX
   graphicx,      % Enhanced support for graphics
   hyperref,      % Extensive support for hypertext
-  etoc,          % Completely customisable TOCs
+  titlesec,      % Select alternative section titles
+  titletoc,      % Alternative headings for toc/lof/lot
+  fancyhdr,      % Extensive control of page headers and footers in LaTeX2ε
+  minted,        % Highlighted source code for LATEX
+  tabularx,      % Tabulars with adjustable-width columns
 }
 
 % ----- options -----
@@ -35,6 +39,11 @@
 \DeclareStringOption[default]{geomode}
 \DeclareVoidOption{default}{\ekv{geomode=default}} % inner is greater for printting
 \DeclareVoidOption{digital}{\ekv{geomode=digital}} % texts are centered digital useage
+
+% minted code
+\DeclareStringOption[none]{code} % none or minted
+\DeclareVoidOption{minted}{\ekv{code=minted}}
+\DeclareVoidOption{none}{\ekv{code=none}}
 
 \DeclareDefaultOption{
   \PassOptionsToClass{\CurrentOption}{book}}
@@ -77,8 +86,8 @@
 \ifdefstring{\BOOOK@geomode}{default}{
 \geometry{ % default for printing
   paper=b6paper,
-  inner=20mm,
-  outer=10mm,
+  inner=23mm,
+  outer=11mm,
   top=15mm,
   bottom=10mm,
   headheight=8mm,
@@ -87,8 +96,8 @@
 }}{
 \geometry{ % better for digital reading
   paper=b6paper,
-  inner=15mm,
-  outer=15mm,
+  inner=17mm,
+  outer=17mm,
   top=15mm,
   bottom=10mm,
   headheight=8mm,
@@ -268,6 +277,10 @@
   \newcommand{\subtitlecolor}{dimgray}
   \newcommand{\titledashcolor}{lightgray}
   \newcommand{\authorcolor}{gray}
+  \newcommand{\chaptercolor}{dimgray}
+  \newcommand{\sectioncolor}{dimgray}
+  \newcommand{\subsectioncolor}{darkgray}
+  \newcommand{\subsubsectioncolor}{gray}
   \newcommand{\linksintoccolor}{black}
   \newcommand{\linkcolorofhyperref}{darkgray}
   \newcommand{\urlcolorofhyperref}{darkgray}
@@ -279,6 +292,7 @@
   \newcommand{\contentsnamecolor}{\keywordbigcolor}
   \newcommand{\listtablenamecolor}{\keywordbigcolor}
   \newcommand{\listfigurenamecolor}{\keywordbigcolor}
+  \newcommand{\chapternamecolor}{\keywordbigcolor}
   \newcommand{\appendixnamecolor}{\keywordbigcolor}
   \newcommand{\bibnamenamecolor}{\keywordbigcolor}
   \newcommand{\indexnamecolor}{\keywordbigcolor}
@@ -309,6 +323,19 @@
   linktocpage
 }
 
+%% pagenumber, header
+%% from https://mirror-hk.koddos.net/CTAN/macros/latex/contrib/fancyhdr/fancyhdr.pdf
+\fancyhf{} % remove former style
+\fancyhead{} % clear all header fields
+\fancyfoot{} % clear all footer fields
+\ifdefstring{\BOOOK@geomode}{digital}{
+    \fancyfoot[C]{\thepage} % for digital geomode, center the page number
+  }{ % default
+    \fancyfoot[LE,RO]{\thepage} % for default geomode, even page left, odd page right
+  }
+\renewcommand{\headrulewidth}{0pt} % no rule
+\renewcommand{\footrulewidth}{0pt}
+
 % ----- newcommands and renewcommands -----
 %% commands for the particular label name specific
 %% to different languages
@@ -327,7 +354,7 @@
   \renewcommand{\bibname}{参考文献}
   \renewcommand{\appendixname}{附录}
   \renewcommand{\indexname}{索引}
-  \renewcommand{\proofname}{证明}
+  \renewcommand{\chaptername}{章}
 }{\relax}
 
 %% commands that procedure arguments
@@ -407,3 +434,84 @@
   \@starttoc{toc}
   \hypersetup{linkcolor=skyblue}
 }
+\let\oldtableofcontents\tableofcontents
+\renewcommand{\tableofcontents}{
+  \pagenumbering{roman}
+  \oldtableofcontents
+  \pagenumbering{arabic}
+  \setcounter{page}{0}
+}
+
+%% chapter style
+%% frome https://tex.stackexchange.com/questions/94729/how-to-customize-chapter-heading-style
+%%
+%% <chapter label>
+%% [before]
+%% [after]<main part>
+%%
+\titleformat{\chapter}% command
+[display]% shape
+{\normalsize\color{\chaptercolor}}% format of the main part
+{\normalsize\color{\chapternamecolor}% color
+  \large\bfseries\chaptertitlename% titlename
+  \hspace{0.5em}% space
+  \huge\bfseries\thechapter}% chapter label
+{1pt}% before
+{\bfseries\huge}% after
+
+% the following is editted from titlesec document
+%% from http://tug.ctan.org/tex-archive/macros/latex/contrib/titlesec/titlesec.pdf
+\titleformat{\section}%
+{\normalfont\Large\bfseries\color{\sectioncolor}}%
+{\thesection}{1em}{}
+
+\titleformat{\subsection}%
+{\normalfont\large\bfseries\color{\subsectioncolor}}%
+{\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}%
+{\normalfont\normalsize\bfseries\color{\subsubsectioncolor}}%
+{\thesubsubsection}{1em}{}
+
+\titleformat{\paragraph}[runin]%
+{\normalfont\normalsize\bfseries\color{black}}%
+{\theparagraph}{1em}{}
+
+\titleformat{\subparagraph}[runin]%
+{\normalfont\normalsize\bfseries\color{black}}%
+{\thesubparagraph}{1em}{}
+
+\titlespacing*{\chapter}{0pt}{50pt}{40pt}
+\titlespacing*{\section}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+\titlespacing*{\subsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\titlespacing*{\subsubsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1em}
+\titlespacing*{\subparagraph}{\parindent}{3.25ex plus 1ex minus .2ex}{1em}
+
+% ----- other commands and enviroments -----
+%% insert image
+\newcommand{\image}[2][]{
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[
+    width=0.618\textwidth,
+    height=0.147\textheight,
+    keepaspectratio
+  ]{#2}
+  % test var if empty
+  %% from https://tex.stackexchange.com/questions/53068/how-to-check-if-a-macro-value-is-empty-or-will-not-create-text-with-plain-tex-co
+  \def\temp{#1}\ifx\temp\empty
+  \else
+    \caption{#1}
+  \fi
+\end{figure}
+}
+
+%% minted: insert code
+%% from https://tex.stackexchange.com/questions/42393/new-environment-with-minted
+\ifdefstring{\BOOOK@code}{minted}{
+\newenvironment{code}[1]
+ {\VerbatimEnvironment % use this to avoid other formatts distrubting
+  \begin{minted}[tabsize=2,breaklines]{#1}}
+ {\end{minted}}
+}{\relax}
