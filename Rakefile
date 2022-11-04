@@ -39,7 +39,7 @@ def hook_shell_commands(cmd)
   Open3.popen3(cmd) do |stdin, stdout, stderr, wait|
     FiberScheduler do
       Fiber.schedule { while (read = stdout.gets); print read.force_encoding("utf-8").light_white; end }
-      Fiber.schedule { while (read = stderr.gets); print read.force_encoding("utf-8").red; end }  
+      Fiber.schedule { while (read = stderr.gets); print read.force_encoding("utf-8").red; end }
     end
   end
 end

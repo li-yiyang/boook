@@ -2,6 +2,11 @@
 A very simple LaTeX template class for learning. 
 
 ## How to use
+> Note: If you are really new in LaTeX,
+> please check the `example.pdf` in this project.  
+> 如果你对 LaTeX 一无所知, 那么可以参考项目里面的
+> `example.pdf` 来学习一下. 
+
 ### Old Method - (Stable, But Hard)
 If you just need to use it as a normal class 
 (for which I think is foolish, because 
@@ -89,3 +94,6 @@ in the possible future :p
   * Better caption effect | 修改添加图表的 `caption` 的显示效果
   * Better Automation | 更好的自动化 Rakefile
   * Others | 其他一些目前还没想到的东西
+* **[2022/11/05] Update | 更新**:  
+  Rewrite the `example.tex` to a basic LaTeX tutorial.  
+  将 `example.tex` 重新写成了一个简单的 LaTeX 教程. 

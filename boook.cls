@@ -326,8 +326,6 @@
 %% pagenumber, header
 %% from https://mirror-hk.koddos.net/CTAN/macros/latex/contrib/fancyhdr/fancyhdr.pdf
 \fancyhf{} % remove former style
-\fancyhead{} % clear all header fields
-\fancyfoot{} % clear all footer fields
 \ifdefstring{\BOOOK@geomode}{digital}{
     \fancyfoot[C]{\thepage} % for digital geomode, center the page number
   }{ % default
@@ -485,7 +483,7 @@
 \titlespacing*{\section}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
 \titlespacing*{\subsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 \titlespacing*{\subsubsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
-\titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1em}
+\titlespacing*{\paragraph}{\parindent}{3.25ex plus 1ex minus .2ex}{1em}
 \titlespacing*{\subparagraph}{\parindent}{3.25ex plus 1ex minus .2ex}{1em}
 
 % ----- other commands and enviroments -----
@@ -512,6 +510,5 @@
 \ifdefstring{\BOOOK@code}{minted}{
 \newenvironment{code}[1]
  {\VerbatimEnvironment % use this to avoid other formatts distrubting
-  \begin{minted}[tabsize=2,breaklines]{#1}}
- {\end{minted}}
-}{\relax}
+  \begin{minted}[tabsize=2,breaklines,breakanywhere]{#1}}
+ {\end{minted}}}{\relax}
