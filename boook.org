@@ -1,0 +1,257 @@
+#+title: Org Mode LaTeX Test
+#+subtitle: Why Not Have A Try?
+#+author: 凉凉
+#+latex_class: boook
+#+latex_class_options: [geomode=digital,code=minted]
+* 如何在 Org-Mode 中使用 LaTeX
+** 为啥?
+实际上, 我已经很久没有手写过 LaTeX 代码了 (除了写数学公式),
+因为 Org-Mode 是真的香. 只是看到别人在写自己的简历 LaTeX,
+突然想到自己平时使用的默认的 LaTeX 导出确实是有那么点丑陋,
+又想到自己之前还写过这么个 LaTeX 模版, 所以不妨就试试看?
+
+** 首先, 假设你有一个那啥
+如果你已经有了一个 LaTeX 模版, 并且你已经写了一个 Org-Mode 文档,
+那么就可以让 Org-Mode 文档使用该模版进行导出,
+只需要在 Org 的属性上添加一个说明:
+
+#+begin_src org
+  ,#+latex_class: boook
+  ,#+latex_class_options: [geomode=digital,code=minted]
+#+end_src
+
+当然, 如果你只是这么个添加, 然后去导出的话,
+你会得到一个报错提醒 (因为 Emacs 不认你这个 =documentclass=).
+
+但是没有关系, 只需要添加一个命令, 即可让 Emacs 认识你的 =documentclass=:
+
+#+begin_src emacs-lisp
+  (add-to-list 'org-latex-classes
+               '("boook"
+                 "\\documentclass{boook}"
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+#+end_src
+
+那么这个是什么意思呢? 上面的代码翻译成人话大概是这样的一个感觉:
+
+#+begin_src emacs-lisp
+  (add-to-list 'org-latex-classes
+               '(documentclass-名字
+                 LaTeX-默认的头信息
+                 第-n-个-*-对应的-LaTeX-代码))
+#+end_src
+
+也就是说, 按照上面的代码,
+在 Org-Mode 里面的一级标题会被映射成 =chapter= 命令,
+二级标题会被映射成 =section= 命令等等. 
+
+做完这些, 基本上就完事了. =C-c C-e= 使用 LaTeX 导出吧.
+
+** 那么使用效果如何呢?
+说实话, 没啥感觉, 毕竟我的 [[https://github.com/li-yiyang/boook/][boook]] 文档类写得并不太行,
+编译一个文档太耗时间了 (应该主要的问题是用了一堆包,
+还有 Org-Mode 会删掉一些中间文件, 所以每次都要重新编译,
+导致会比较慢).
+
+所以, 欸嘿, 就这样呗. 
+
+* 无聊的小说
+** 两片
+我意识到我干了一件极其愚蠢的事情.
+就在刚才, 我从茶叶包里面一如既往地拿出了茶叶,
+然后扔进了杯子里. 尽管到这一步还都很正常,
+直到...
+
+直到?
+
+直到我往杯子里看了一眼.
+
+茶叶坏了? 还是你没把前一次的茶叶给到掉?
+
+不, 都不是, 里面正巧躺着两块茶包. 我放多了.
+
+那又如何... 这又会有什么事情呢. 
+
+可是这杯子里还留了点水, 更糟的是, 它俩全湿了.
+所以我不得不把这两包茶叶全拿去泡了.
+
+哈, 估计这可得喝上一壶. 可是这又有什么的呢?
+
+量变产生质变啊. 你也知道的, 这大晚上的,
+本来一杯就够我受的了, 何况是剂量翻倍呢.
+然后...
+
+然后?
+
+然后你就出现了.
+
+所以怪我咯?
+
+啊, 不是, 我也说不好是否只是因为我有点神经质了,
+毕竟大晚上的. 可是我即不能了解你在想什么,
+也不能控制你说什么. 唯一的结论就是我分裂了.
+而你就是我分裂出来的那个玩意儿.
+
+这有什么大不了的. 倒是我很好奇为什么一杯加了剂量的茶叶,
+就有这么大的威力. 要是真这样, 肯定会有那些重口味的家伙,
+早就发现了这个 bug 啊. 
+
+这我怎么知道, 我又不是这个专业的, 什么九年义务教育也没这个吧,
+更别说我都快把这茬子事情给忘光了. 啊, 你在说啥呢,
+扯远了吧, 关键是分裂也就算了, 为什么是这样的分裂呢? 
+
+是怎样?
+
+就是这样.
+
+这样又是怎样?
+
+当然是你丫是物理的分裂啊! 哪里有从肚子里面左右对半分开的啊.
+这也太奇怪了吧.
+
+我有一句话不知道该不该讲... 异型, 好像就是这么来的.
+
+这我知道, 但是说到底我也没看过异型. 照理来说,
+那个好像是抱脸虫吧, 可是宿主不是会死翘翘么,
+我还活着啊. 并且再怎么不济, 这分裂完了的你和我,
+完全就只是体积折半的等比缩放啊. 我长得很丑么?
+
+啊, 并无此意. 可是难道不是很奇怪么?
+倘若是在腹部拦腰截断后的分裂, 仍然保证的是等比缩放,
+那么组成我上半身的细胞结构和组成你下半身的细胞,
+又是怎么来的呢?
+
+我怎么知道啊. 话说, 你是不是有点过分了.
+一开始就只是个捧哏, 现在还这么咄咄逼人.
+已经三点钟了, 这样下去还怎么睡觉啊. 淦.
+
+但是, 我很好奇.
+
+千反田是吧.
+
+欸嘿. 但是奇怪的是, 我并没有对这部动漫剧情的印象,
+但是我却有对这部动漫的梗的印象, 甚至还能够像这样来引经据典.
+
+啊, 是吧.
+
+难道说, 尽管我们看起来是一样的, 实际上却是非对称的呢?
+啊, 对称, 好东西, 来自自然界的规律的总结, 但是同时又是自然界规律的反应.
+但是宇称不守恒却是不对称性在自然界中的存在.
+难道说这样的分裂之中倒也有一种自然界中的规律.
+不不不, 这样太过唯象了. 那么更深层次的原因是什么呢?
+
+是什么都无所谓了吧, 淦.
+
+不啊, 你作为一个物理系的学生, 难道就不会对这感到兴奋么?
+啊, 斯巴啦西~
+
+嗯嗯...
+
+Emmm, I thought he sounds perfunctorily.
+
+就是啊, 怎么能这样呢?
+
+嗯...
+
+Well, in my point of view, this might be caused by that tea,
+which activated the deep layer of human brain to make them
+over-excited.
+
+所以你是想说, 因为潜在的神经被激发,
+所以发挥了人类不能发挥的本领.
+也就是都市传说中的人类的大脑有 90% 都没有被开发的反面咯?
+嘶, 等等, 你又是谁?
+
+呼噜噜~ 呼噜噜~ 
+
+Emmm? Me? Well, who I am, where I'm from, where I'm going to,
+I don't think any one could ever answer such questions.
+And speaking about the identity of each of us, can you
+identify you and me, you and he or even he and me?
+We're just like isomorphic parts in a same data structure.
+And I think it's meaningless and useless to distinguish us.
+
+嗯... 听起来倒是有些道理. 但是我并不认为结构上的同一性,
+或者说至少是相似性就能够说我们是全同而无法区分的.
+区分我们是否有意义, 我觉得还是有必要去思考一下的.
+
+呼噜噜~
+
+So you mean?
+
+我是说, 如果我们真的无法区分, 那么这个时候, 为什么他在装睡,
+而我们会形成一个问答, 或者说, 对话的关系呢?
+倘若我们是完全一致的对象, 那么我们之间估计连对话都无法进行了吧.
+是吧, 那个装睡的家伙. 
+
+害, 我不装了, 但我确实很困了. 从外表上来看,
+我们确实像极了. 把我们和那个同样躺在地上的拼起来,
+估计还能够还原回原本的大小吧 --
+尽管我也不清楚这家伙是什么时候又开始分裂出来的. 
+可是我们又并不是那么的相同.
+
+Well, at this point of view, I might agree with you.
+
+そですね
+
+确实. 啊, 分裂又新增了呢. 这回又是半吊子日语了呢.
+
+啊, 鉴于我们终于有了一个看起来还算统一的意见,
+我现在有了一个大胆的猜想. 
+
+Please feel free to express.
+
+下手な日本語でごめんなさい
+
+是关于统一的猜想么?
+
+大概吧, 我的想法是, 有没有一种可能, 这样的分裂会一直进行下去,
+但是总的体积并不会改变, 于是分裂后的我们就像是一堆细胞一样,
+最终会拼回一个整体? 而这个整体会在我们的共同意识下进行决策和行动?
+
+Emmm....
+
+何が、少し気分が悪い
+
+确实, 有一种人体蜈蚣的恶心感. 话说人体蜈蚣是什么?
+
+不知道, 大概在另外的哪一个个体部分里吧.
+
+I don't know.
+
+私も
+
+Vielleicht habe ich eine Idee...
+
+C'était un film dégoûtant.
+
+/后记: 时间已经来到了凌晨六点钟, 只见床上一坨烂泥一样扭曲着的家伙还没有入睡. 我们不知道他到底经历了什么, 大概, 只是多泡了一片茶叶包吧.../
+
+#+latex: \appendix
+* Org-Mode Settings
+** 设置文档类
+#+begin_src emacs-lisp :results silent
+  (add-to-list 'org-latex-classes
+                 '("boook"
+                 "\\documentclass{boook}
+                  [NO-DEFAULT-PACKAGES]"
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+#+end_src
+
+** 设置代码环境
+#+begin_src emacs-lisp :results silent
+  (setq org-latex-listings 'minted)
+#+end_src
+
+** 小结
+不是很好用, 之后需要改, 就酱.
